@@ -1,4 +1,4 @@
-const db = require("../database/connection");
+const db = require("../database/connection.js");
 
 module.exports = {
   add,
@@ -11,8 +11,15 @@ function find() {
   return db("users").select("id", "username").orderBy("id");
 }
 
+// return the role name together with the user data
 function findBy(filter) {
-  return db("users").where(filter).orderBy("id");
+  // select u.id, u.username, u.password, r.name as role
+  // from users as u
+  // join roles as r on u.role = r.id
+  return db("users as u")
+    .select("u.id", "u.username", "u.password", "u.department")
+    .where(filter)
+    .orderBy("u.id");
 }
 
 async function add(user) {
